@@ -1,0 +1,9 @@
+[project]
+name = "cross-check"
+version = "0.1.0"
+description = "A multi-agent system for cross-checking spam URLs"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "google-adk>=1.19.0",
+]
