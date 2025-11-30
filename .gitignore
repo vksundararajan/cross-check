@@ -10,4 +10,4 @@ wheels/
 .venv
 
 # IDE-generated files
-llms-full.txt
+.env
