@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.14.2",
     "google-adk>=1.19.0",
+    "litellm>=1.80.7",
     "requests>=2.32.5",
 ]

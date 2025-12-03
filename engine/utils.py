@@ -1,5 +1,13 @@
+import os
+import yaml
 import requests
 from bs4 import BeautifulSoup
+
+def load_prompts(file_path: str = "instr.yaml") -> dict:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    full_path = os.path.join(current_dir, file_path)
+    with open(full_path, "r") as f:
+        return yaml.safe_load(f)
 
 def process_website_data(url: str) -> tuple:
     try:
