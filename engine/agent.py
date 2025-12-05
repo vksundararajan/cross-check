@@ -7,9 +7,10 @@ import validators
 
 from typing import AsyncGenerator
 from google.adk.apps.app import App
+from google.genai import types
 from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent, ParallelAgent
-from google.adk.models.lite_llm import LiteLlm
 from google.adk.agents.invocation_context import InvocationContext
+from google.adk.models.lite_llm import LiteLlm
 from google.adk.events import Event, EventActions
 
 from utils import load_config, process_website_data
@@ -19,10 +20,10 @@ config = load_config()
 
 # -------------------------------- Judge Agent ------------------------------- #
 judgement_agent = LlmAgent(
-    model=LiteLlm(model=config["judge"]["model"]),
-    name=config["judge"]["name"],
-    description=config["judge"]["description"],
-    instruction=config["judge"]["instruction"],
+    model=LiteLlm(model=config["judgement_agent"]["model"]),
+    name=config["judgement_agent"]["name"],
+    description=config["judgement_agent"]["description"],
+    instruction=config["judgement_agent"]["instruction"],
 )
 
 # ---------------------- Custom Agent: Consensus Checker --------------------- #
@@ -36,18 +37,32 @@ class ConsensusChecker(BaseAgent):
         try:
             moderator_output = ctx.session.state.get("moderator_output")
             if moderator_output and moderator_output.get("final_verdict") != "UNCERTAIN":
-                raise ValueError("Invalid URL")
+                # moderator_output["final_verdict"] = "UNCERTAIN"
+                raise ValueError("Final verdict is Finalized")
 
-            yield Event(author=self.name)
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    role=self.name,
+                    parts=[types.Part(text="Debate should continue because of uncertainity in verdict.")],
+                )
+            )
         except Exception as e:
-            yield Event(author=self.name, actions=EventActions(escalate=True))
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    role=self.name,
+                    parts=[types.Part(text="Verdict is finalized.")],
+                ),
+                actions=EventActions(escalate=True)
+            )
 
 # -------------------------- Debate Agent: Moderator ------------------------- #
 moderator_agent = LlmAgent(
-    model=LiteLlm(model=config["moderator"]["model"]),
-    name=config["moderator"]["name"],
-    description=config["moderator"]["description"],
-    instruction=config["moderator"]["instruction"],
+    model=LiteLlm(model=config["moderator_agent"]["model"]),
+    name=config["moderator_agent"]["name"],
+    description=config["moderator_agent"]["description"],
+    instruction=config["moderator_agent"]["instruction"],
     output_schema=ModeratorOutput,
     output_key="moderator_output"
 )
@@ -117,30 +132,55 @@ class UrlPreProcessor(BaseAgent):
         self, ctx: InvocationContext
     ) -> AsyncGenerator[Event, None]:
         try:
-            last_event = ctx.session.history[-1] 
-            user_query = last_event.content
+            last_event = ctx.session.events[-1].content
+            if last_event.role == 'user':
+                valid_url = last_event.parts[0].text
             
             url_pattern = r"https?://[\w./?=-]+"
-            match = re.search(url_pattern, user_query)
+            match = re.search(url_pattern, valid_url)
             if not match:
                 raise ValueError("No URL found in user query")
 
             fetch_url = match.group(0)  
             if not validators.url(fetch_url):
                 raise ValueError("Invalid URL")
-            
+
             url, cleaned_html, visible_text = process_website_data(valid_url)
 
             ctx.session.state["target_url"] = url
             ctx.session.state["html_content"] = cleaned_html
             ctx.session.state["visible_text"] = visible_text
 
-            yield Event(author=self.name)
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    role=self.name,
+                    parts=[types.Part(text="URL processed successfully.")],
+                ),
+            )
         except Exception as e:
-            yield Event(author=self.name, actions=EventActions(escalate=True))
+            ctx.session.state["is_valid_url"] = False
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    role=self.name,
+                    parts=[types.Part(text="Invalid URL.")],
+                ),
+                actions=EventActions(escalate=True)
+            )
 
 # ------------------------------- Main Pipeline ------------------------------ #
-cross_check_pipeline = SequentialAgent(
+class CrossCheckPipeline(SequentialAgent):
+    async def _run_async_impl(
+        self, ctx: InvocationContext
+    ) -> AsyncGenerator[Event, None]:
+        for agent in self.sub_agents:
+            if ctx.session.state.get("is_valid_url") is False:
+                return
+            async for event in agent.run_async(ctx):
+                    yield event
+
+cross_check_pipeline = CrossCheckPipeline(
     name="cross_check_pipeline",
     sub_agents=[
         UrlPreProcessor(name="url_preprocessing_agent"),

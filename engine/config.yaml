@@ -10,7 +10,7 @@ url_analyst:
     structure, and any indicators that suggest
     phishing or legitimate intent.
 
-    URL: `{target_url}`
+    URL: {target_url}
     
     Assess the URL to determine if it is phishing or non-phishing. 
     Identify key suspicious or benign patterns you found and 
