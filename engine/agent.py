@@ -1,7 +1,3 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 import re
 import validators
 
@@ -13,8 +9,8 @@ from google.adk.agents.invocation_context import InvocationContext
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.events import Event, EventActions
 
-from utils import load_config, process_website_data
-from schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput, ModeratorOutput
+from .utils import load_config, process_website_data
+from .schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput, ModeratorOutput
 
 config = load_config()
 
@@ -133,9 +129,13 @@ class UrlPreProcessor(BaseAgent):
     ) -> AsyncGenerator[Event, None]:
         try:
             last_event = ctx.session.events[-1].content
-            if last_event.role == 'user':
+            valid_url = None
+            if last_event and last_event.role == 'user':
                 valid_url = last_event.parts[0].text
             
+            if not valid_url:
+                raise ValueError("No user input found")
+
             url_pattern = r"https?://[\w./?=-]+"
             match = re.search(url_pattern, valid_url)
             if not match:

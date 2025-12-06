@@ -1,0 +1,46 @@
+{
+    "eval_set_id": "evalset3060ee",
+    "name": "evalset3060ee",
+    "eval_cases": [
+        {
+            "eval_id": "caseafa49b",
+            "conversation": [
+                {
+                    "invocation_id": "e-0ebdf01c-d3f1-49fa-a687-7563f23ef569",
+                    "user_content": {
+                        "parts": [
+                            {
+                                "text": "http://apple-iforget.com/"
+                            }
+                        ],
+                        "role": "user"
+                    },
+                    "final_response": {
+                        "parts": [
+                            {
+                                "text": "{'final_verdict': 'PHISHING', 'reasoning': 'All specialized agents unanimously flagged the URL http://apple-iforgot.com/ (apple-iforget.com) as phishing, citing the brand impersonation of Apple, a suspicious domain that mimics the legitimate Apple domain, and the implication of a password‑reset or credential‑theft motive. The high confidence scores (0.7‑0.9) across agents and the moderator’s consensus confirm the phishing classification.'}"
+                            }
+                        ],
+                        "role": "model"
+                    },
+                    "intermediate_data": {},
+                    "creation_timestamp": 1764992611.28903
+                }
+            ],
+            "session_input": {
+                "app_name": "engine",
+                "user_id": "user",
+                "state": {
+                    "target_url": "",
+                    "html_content": "",
+                    "visible_text": "",
+                    "url_assessment": "",
+                    "html_assessment": "",
+                    "content_assessment": "",
+                    "brand_assessment": "",
+                    "moderator_output": ""
+                }
+            }
+        }
+    ]
+}
