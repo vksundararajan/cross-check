@@ -1,7 +1,9 @@
 import yaml
 import requests
+import io
 from bs4 import BeautifulSoup
 from pathlib import Path
+from markitdown import MarkItDown
 
 def load_config(file_path: str = None) -> dict:
     file_path = Path(__file__).parent / "config.yaml"
@@ -45,7 +47,10 @@ def process_website_data(url: str) -> tuple:
         for tag in soup(['script']):
             tag.decompose()
         
-        visible_text = soup.get_text(separator=' ', strip=True)
+        binary_stream = io.BytesIO(soup.encode('utf-8'))
+        md = MarkItDown()
+        result = md.convert_stream(binary_stream, file_extension=".html")
+        visible_text = result.text_content
 
         if not cleaned_html and not visible_text:
             return None, None, None
