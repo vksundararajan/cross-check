@@ -6,11 +6,12 @@ from google.adk.apps.app import App
 from google.genai import types
 from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent, ParallelAgent
 from google.adk.agents.invocation_context import InvocationContext
+from google.adk.tools.tool_context import ToolContext
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.events import Event, EventActions
 
 from .utils import load_config, process_website_data
-from .schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput, ModeratorOutput
+from .schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput
 
 config = load_config()
 
@@ -22,36 +23,14 @@ judgement_agent = LlmAgent(
     instruction=config["judgement_agent"]["instruction"],
 )
 
-# ---------------------- Custom Agent: Consensus Checker --------------------- #
-class ConsensusChecker(BaseAgent):
-    def __init__(self, name: str):
-        super().__init__(name=name)
-
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        try:
-            moderator_output = ctx.session.state.get("moderator_output")
-            if moderator_output and moderator_output.get("final_verdict") != "UNCERTAIN":
-                # moderator_output["final_verdict"] = "UNCERTAIN"
-                raise ValueError("Final verdict is Finalized")
-
-            yield Event(
-                author=self.name,
-                content=types.Content(
-                    role=self.name,
-                    parts=[types.Part(text="Debate should continue because of uncertainity in verdict.")],
-                )
-            )
-        except Exception as e:
-            yield Event(
-                author=self.name,
-                content=types.Content(
-                    role=self.name,
-                    parts=[types.Part(text="Verdict is finalized.")],
-                ),
-                actions=EventActions(escalate=True)
-            )
+# -------------------------- Custom Tool: Exit Loop -------------------------- #
+def exit_loop(tool_context: ToolContext):
+    """
+    Call this function ONLY when the final verdict is reached, 
+    signaling the iterative process should end.
+    """
+    tool_context.actions.escalate = True
+    return {}
 
 # -------------------------- Debate Agent: Moderator ------------------------- #
 moderator_agent = LlmAgent(
@@ -59,8 +38,7 @@ moderator_agent = LlmAgent(
     name=config["moderator_agent"]["name"],
     description=config["moderator_agent"]["description"],
     instruction=config["moderator_agent"]["instruction"],
-    output_schema=ModeratorOutput,
-    output_key="moderator_output"
+    tools=[exit_loop],
 )
 
 # ------------------------ Debate Agents: Specialists ------------------------ #
@@ -113,8 +91,7 @@ debate_loop = LoopAgent(
                 brand_analyst_agent
             ]
         ),
-        moderator_agent,
-        ConsensusChecker(name="consensus_checking_agent")
+        moderator_agent
     ],
     max_iterations=3
 )
@@ -151,36 +128,12 @@ class UrlPreProcessor(BaseAgent):
             ctx.session.state["html_content"] = cleaned_html
             ctx.session.state["visible_text"] = visible_text
 
-            yield Event(
-                author=self.name,
-                content=types.Content(
-                    role=self.name,
-                    parts=[types.Part(text="URL processed successfully.")],
-                ),
-            )
+            return
         except Exception as e:
-            ctx.session.state["is_valid_url"] = False
-            yield Event(
-                author=self.name,
-                content=types.Content(
-                    role=self.name,
-                    parts=[types.Part(text="Invalid URL.")],
-                ),
-                actions=EventActions(escalate=True)
-            )
+            yield Event(author=self.name, actions=EventActions(escalate=True))
 
 # ------------------------------- Main Pipeline ------------------------------ #
-class CrossCheckPipeline(SequentialAgent):
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        for agent in self.sub_agents:
-            if ctx.session.state.get("is_valid_url") is False:
-                return
-            async for event in agent.run_async(ctx):
-                    yield event
-
-cross_check_pipeline = CrossCheckPipeline(
+cross_check_pipeline = SequentialAgent(
     name="cross_check_pipeline",
     sub_agents=[
         UrlPreProcessor(name="url_preprocessing_agent"),

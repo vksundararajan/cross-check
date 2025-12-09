@@ -20,7 +20,3 @@ class BrandAnalystOutput(BaseModel):
     Claim: Literal["PHISHING", "LEGITIMATE"] = Field(description="Does the content attempt to impersonate a known brand?")
     confidence: str = Field(pattern=r"^(0(\.\d+)?|1(\.0+)?)$", description="A score between 0 and 1")
     reasoning: str = Field(description="Name(s) of impersonated brands and supporting context")
-
-class ModeratorOutput(BaseModel):
-    final_verdict: Literal["PHISHING", "LEGITIMATE", "UNCERTAIN"] = Field(description="The current standing decision")
-    reasoning: str = Field(description="Summary of why you think the debate should stop or continue")
