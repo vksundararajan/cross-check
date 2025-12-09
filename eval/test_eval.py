@@ -15,7 +15,7 @@ def load_env():
 
 
 @pytest.mark.asyncio
-async def test_eval_legitimate():
+async def test_legitimate():
     data_path = Path(__file__).parent / "data/legitimate.evalset.json"
     await AgentEvaluator.evaluate(
         agent_module="engine",
@@ -25,8 +25,18 @@ async def test_eval_legitimate():
 
 
 @pytest.mark.asyncio
-async def test_eval_phishing():
+async def test_phishing():
     data_path = Path(__file__).parent / "data/phishing.evalset.json"
+    await AgentEvaluator.evaluate(
+        agent_module="engine",
+        eval_dataset_file_path_or_dir=str(data_path),
+        num_runs=1
+    )
+
+
+@pytest.mark.asyncio
+async def test_behavioral():
+    data_path = Path(__file__).parent / "data/behavioral.evalset.json"
     await AgentEvaluator.evaluate(
         agent_module="engine",
         eval_dataset_file_path_or_dir=str(data_path),

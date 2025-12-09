@@ -123,6 +123,8 @@ class UrlPreProcessor(BaseAgent):
                 raise ValueError("Invalid URL")
 
             url, cleaned_html, visible_text = process_website_data(valid_url)
+            if not url or not cleaned_html or not visible_text:
+                raise ValueError("Failed to process website data")
 
             ctx.session.state["target_url"] = url
             ctx.session.state["html_content"] = cleaned_html
