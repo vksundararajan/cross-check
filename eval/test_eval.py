@@ -8,9 +8,9 @@ pytest_plugins = ("pytest_asyncio",)
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
-    env_path = Path(__file__).parent.parent / "engine/.env"
+    env_path = Path(__file__).parent.parent / ".env"
     if not env_path.exists():
-        env_path = "engine/.env"
+        env_path = ".env"
     dotenv.load_dotenv(str(env_path))
 
 
