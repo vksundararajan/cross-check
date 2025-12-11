@@ -1,3 +1,7 @@
+import debugpy
+debugpy.listen(5678)
+print("Waiting for debugger attach...")
+
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -10,7 +14,6 @@ from app.events import load, on_url_input, on_toggle_debate
 @me.component
 def agent_card(key: str, result: dict):
     status = result["status"]
-    
     with me.box(style=S.card_container(status)):
         with me.box(style=S.CARD_HEADER):
             me.icon(result["icon"])
