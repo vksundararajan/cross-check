@@ -30,9 +30,8 @@ class Styles:
 
     CARD_HEADER = me.Style(display="flex", align_items="center", gap=12)
     CARD_TITLE_BOX = me.Style(flex_grow=1)
-    CARD_TITLE_TEXT = me.Style(font_weight="bold")
+    CARD_TITLE_TEXT = me.Style(font_weight="bold", padding=me.Padding(top=10))
     SPINNER_BOX = me.Style(padding=me.Padding.symmetric(vertical=20))
-    VERDICT_LABEL = me.Style(font_weight="bold")
 
     # ---------------------------------- Methods --------------------------------- #
     @staticmethod
@@ -62,7 +61,14 @@ class Styles:
 
     @staticmethod
     def verdict_box(verdict):
-        verdict_color = "#d32f2f" if verdict == "PHISHING" else "#388e3c" if verdict == "LEGITIMATE" else "#757575"
+        if verdict == "PHISHING":
+            verdict_color = "#d32f2f"
+        elif verdict == "LEGITIMATE":
+            verdict_color = "#388e3c"
+        elif verdict in ("INVALID URL", "RATE LIMIT", "REQUEST TOO LARGE", "ERROR"):
+            verdict_color = "#f57c00"
+        else:
+            verdict_color = "#757575"
         return me.Style(
             background=verdict_color, 
             color="white", 

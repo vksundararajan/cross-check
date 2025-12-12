@@ -24,13 +24,36 @@ def normalize_status(claim):
     if "PHISHING" in claim: return "PHISHING"
     return "UNCERTAIN"
 
+def set_all_agents(state, status, confidence=0.0, evidence=""):
+    for agent in state.agents.values():
+        agent.update({
+            "status": status,
+            "confidence": confidence,
+            "evidence": evidence,
+            "raw_buffer": ""
+        })
+
+def extract_event_text(event):
+    if not event.content or not event.content.parts:
+        return None
+    return event.content.parts[0].text or None
+
+def process_agent_response(agent, text):
+    agent["raw_buffer"] += text
+    data = parse_agent_json(agent["raw_buffer"])
+    if data:
+        agent["status"] = normalize_status(data.get("Claim"))
+        agent["evidence"] = data.get("reasoning", "")
+        agent["confidence"] = float(data.get("confidence", 0.0))
+        return True
+    return False
+
 # ------------------------------ Event Handlers ------------------------------ #
 def load(e: me.LoadEvent):
     me.set_theme_mode("dark")
 
 def on_url_input(e: me.InputEvent):
-    state = me.state(State)
-    state.url_input = e.value
+    me.state(State).url_input = e.value
 
 def on_toggle_debate(e: me.SlideToggleChangeEvent):
     state = me.state(State)
@@ -39,10 +62,8 @@ def on_toggle_debate(e: me.SlideToggleChangeEvent):
         yield from run_analysis_process()
     else:
         state.final_verdict = ""
-        for k in state.agents:
-            state.agents[k]["status"] = ""
-            state.agents[k]["evidence"] = ""
-            state.agents[k]["raw_buffer"] = ""
+        state.is_analyzing = False
+        set_all_agents(state, status="", confidence=0.0, evidence="")
         yield
 
 # ------------------------------- Process Logic ------------------------------ #
@@ -50,57 +71,43 @@ def run_analysis_process():
     state = me.state(State)
     state.is_analyzing = True
     state.final_verdict = ""
-    
-    # Reset all agents
-    for agent in state.agents.values():
-        agent.update({"status": "PENDING", "evidence": "", "raw_buffer": "", "confidence": 0.0})
+    set_all_agents(state, status="PENDING")
     yield
-
-    AGENT_MAPPING = {
-        "url_analyst_agent": "url",
-        "html_structure_agent": "html",
-        "content_semantic_agent": "content",
-        "brand_impersonation_agent": "brand",
-        "judgement_agent": "final"
-    }
 
     try:
         for event in interface.stream_analysis(state.url_input):
-            if event.author not in AGENT_MAPPING:
-                continue
-            if not event.content or not event.content.parts:
-                continue
+            if not event.content and event.author == "url_preprocessing_agent":
+                set_all_agents(state, status="UNCERTAIN", confidence=0.0, evidence="Analysis skipped due to invalid URL")
+                state.final_verdict = "INVALID URL"
+                break
             
-            text = event.content.parts[0].text
+            text = extract_event_text(event)
             if not text:
                 continue
 
-            ui_key = AGENT_MAPPING[event.author]
+            state_changed = False
+            if event.author == "judgement_agent":
+                state.final_verdict = normalize_status(text)
+                state_changed = True
+            elif event.author in state.agents:
+                state_changed = process_agent_response(state.agents[event.author], text)
 
-            if ui_key == "final":
-                if "LEGITIMATE" in text: state.final_verdict = "LEGITIMATE"
-                elif "PHISHING" in text: state.final_verdict = "PHISHING"
-                else: state.final_verdict = "UNCERTAIN"
-            elif ui_key in state.agents:
-                agent = state.agents[ui_key]
-                agent["raw_buffer"] += text
-                data = parse_agent_json(agent["raw_buffer"])
-                
-                if data:
-                    agent["status"] = normalize_status(data.get("Claim"))
-                    agent["evidence"] = data.get("reasoning", "")
-                    try:
-                        agent["confidence"] = float(data.get("confidence", 0.0))
-                    except (ValueError, TypeError):
-                        agent["confidence"] = 0.0
-                else:
-                    agent["evidence"] = agent["raw_buffer"]
-
-            yield
+            if state_changed:
+                yield
 
     except Exception as e:
-        print(f"Runtime Error: {e}")
         state.final_verdict = "Error"
+    
+    if not state.final_verdict:
+        state.final_verdict = "REQUEST TOO LARGE"
+        for agent in state.agents.values():
+            if agent["status"] == "PENDING":
+                agent.update({
+                    "status": "UNCERTAIN",
+                    "confidence": 0.0,
+                    "evidence": "Processing incomplete due to rate limit.",
+                    "raw_buffer": ""
+                })
     
     state.is_analyzing = False
     yield

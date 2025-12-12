@@ -1,6 +1,6 @@
 url_analyst:
   name: "url_analyst_agent"
-  model: "groq/llama-3.3-70b-versatile"
+  model: "groq/llama-3.1-8b-instant"
   description: "Specializes in examining URL structures and domain characteristics."
   instruction: |
     You are a cybersecurity expert specializing in
@@ -15,6 +15,7 @@ url_analyst:
     Assess the URL to determine if it is phishing or non-phishing. 
     Identify key suspicious or benign patterns you found and 
     provide a confidence score between 0 and 1.
+    Respond in JSON format.
 
 html_analyst:
   name: "html_structure_agent"
@@ -32,6 +33,7 @@ html_analyst:
     Assess the HTML structure to determine if it indicates phishing. 
     Identify relevant structural elements or tag patterns you found and 
     provide a confidence score between 0 and 1.
+    Respond in JSON format.
 
 content_analyst:
   name: "content_semantic_agent"
@@ -49,6 +51,7 @@ content_analyst:
     Assess whether the page language seems phishing-related. 
     Identify specific words, phrases, or sentence patterns that support your claim and 
     provide a confidence score between 0 and 1.
+    Respond in JSON format.
 
 brand_analyst:
   name: "brand_impersonation_agent"
@@ -67,6 +70,7 @@ brand_analyst:
     Assess if the content attempts to impersonate a known brand. 
     Identify the name(s) of impersonated brands with supporting context and 
     provide a confidence score between 0 and 1.
+    Respond in JSON format.
 
 moderator_agent:
   name: "moderator_agent"

@@ -2,19 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mesop: Remote Attach",
+            "name": "Mesop: Debug App",
             "type": "debugpy",
-            "request": "attach",
-            "connect": {
-                "host": "localhost",
-                "port": 5678
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "."
-                }
+            "request": "launch",
+            "program": "${workspaceFolder}/.venv/bin/mesop",
+            "args": [
+                "app/main.py"
             ],
+            "console": "integratedTerminal",
             "justMyCode": false
         }
     ]

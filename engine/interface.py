@@ -5,15 +5,7 @@ from google.genai import types
 
 from .agent import root_agent
 
-AGENT_MAPPING = {
-    "url_analyst": "url",
-    "html_analyst": "html",
-    "content_analyst": "content",
-    "brand_analyst": "brand",
-    "judgement_agent": "final"
-}
-
-def create_runner(app_name="cross-check"):
+def create_runner(app_name="engine"):
     session_service = InMemorySessionService()
     user_id = "user"
     session_id = "session"
@@ -44,5 +36,8 @@ def stream_analysis(url_input: str):
         parts=[types.Part(text=url_input)]
     )
 
-    for event in runner.run(user_id=user_id, session_id=session_id, new_message=user_msg):
-        yield event
+    try:
+        for event in runner.run(user_id=user_id, session_id=session_id, new_message=user_msg):
+            yield event
+    except Exception as e:
+        raise RuntimeError(f"Analysis failed: {str(e)}") from e

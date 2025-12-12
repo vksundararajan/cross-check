@@ -8,7 +8,7 @@ class State:
     is_analyzing: bool = False
     debate_active: bool = False
     agents: dict[str, dict] = field(default_factory=lambda: {
-        "url": {
+        "url_analyst_agent": {
             "name": "URL Analyst", 
             "status": "", 
             "confidence": 0.0, 
@@ -16,7 +16,7 @@ class State:
             "icon": "link", 
             "raw_buffer": ""
         },
-        "html": {
+        "html_structure_agent": {
             "name": "HTML Structure", 
             "status": "", 
             "confidence": 0.0, 
@@ -24,7 +24,7 @@ class State:
             "icon": "code", 
             "raw_buffer": ""
         },
-        "content": {
+        "content_semantic_agent": {
             "name": "Content Semantic", 
             "status": "", 
             "confidence": 0.0, 
@@ -32,7 +32,7 @@ class State:
             "icon": "chat", 
             "raw_buffer": ""
         },
-        "brand": {
+        "brand_impersonation_agent": {
             "name": "Brand Inspector", 
             "status": "", 
             "confidence": 0.0, 

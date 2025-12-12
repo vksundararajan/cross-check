@@ -1,5 +1,6 @@
 import re
 import validators
+import litellm
 
 from typing import AsyncGenerator
 from google.adk.apps.app import App
@@ -13,6 +14,8 @@ from google.adk.events import Event, EventActions
 from .utils import load_config, process_website_data
 from .schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput
 
+litellm.request_timeout = 120
+litellm.num_retries = 5
 config = load_config()
 
 # -------------------------------- Judge Agent ------------------------------- #
@@ -113,7 +116,7 @@ class UrlPreProcessor(BaseAgent):
             if not valid_url:
                 raise ValueError("No user input found")
 
-            url_pattern = r"https?://[\w./?=-]+"
+            url_pattern = r"https?://[\w./?=&%-]+"
             match = re.search(url_pattern, valid_url)
             if not match:
                 raise ValueError("No URL found in user query")
@@ -122,26 +125,26 @@ class UrlPreProcessor(BaseAgent):
             if not validators.url(fetch_url):
                 raise ValueError("Invalid URL")
 
-            url, cleaned_html, visible_text = process_website_data(valid_url)
+            url, cleaned_html, visible_text = process_website_data(fetch_url)
             if not url or not cleaned_html or not visible_text:
                 raise ValueError("Failed to process website data")
 
             ctx.session.state["target_url"] = url
             ctx.session.state["html_content"] = cleaned_html
             ctx.session.state["visible_text"] = visible_text
-
-            return
+            
         except Exception as e:
             yield Event(author=self.name, actions=EventActions(escalate=True))
 
 # ------------------------------- Main Pipeline ------------------------------ #
-cross_check_pipeline = SequentialAgent(
+cross_check_pipeline = LoopAgent(
     name="cross_check_pipeline",
     sub_agents=[
         UrlPreProcessor(name="url_preprocessing_agent"),
         debate_loop,
         judgement_agent
-    ]
+    ],
+    max_iterations=1
 )
 
 root_agent = cross_check_pipeline

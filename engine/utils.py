@@ -32,8 +32,8 @@ def process_website_data(url: str) -> tuple:
 
         cleaned_html = str(soup)
 
-        # Truncate Cleaned HTML -> Limit set to approx 12k tokens (~48k chars) to fit model context
-        MAX_CHARS = 48000
+        # Truncate Cleaned HTML -> Limit set to approx 5k tokens (~20k chars) to fit Groq TPM limits
+        MAX_CHARS = 20000
         if len(cleaned_html) > MAX_CHARS:
             truncated_raw = cleaned_html[:MAX_CHARS]
             last_tag_index = truncated_raw.rfind('>')
@@ -51,6 +51,11 @@ def process_website_data(url: str) -> tuple:
         md = MarkItDown()
         result = md.convert_stream(binary_stream, file_extension=".html")
         visible_text = result.text_content
+
+        # Truncate visible text -> Limit to approx 5k tokens (~20k chars) for TPM limits
+        MAX_TEXT_CHARS = 20000
+        if len(visible_text) > MAX_TEXT_CHARS:
+            visible_text = visible_text[:MAX_TEXT_CHARS] + "\n[Content truncated...]"
 
         if not cleaned_html and not visible_text:
             return None, None, None

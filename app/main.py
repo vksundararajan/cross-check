@@ -1,10 +1,8 @@
-import debugpy
-debugpy.listen(5678)
-print("Waiting for debugger attach...")
-
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
+
+import app.logger
 
 import mesop as me
 from app.state import State
@@ -21,15 +19,17 @@ def agent_card(key: str, result: dict):
                 me.text(result["name"], type="headline-6", style=S.CARD_TITLE_TEXT)
             
             if status != "" and status != "PENDING":
-                me.text(f"{int(result['confidence'] * 100)}%", type="subtitle-1")
+                if status == "UNCERTAIN":
+                    me.text("N/A", type="subtitle-1")
+                else:
+                    me.text(f"{int(result['confidence'] * 100)}%", type="subtitle-1")
 
         if status == "PENDING":
             with me.box(style=S.SPINNER_BOX):
                  me.progress_spinner(diameter=30, stroke_width=3)
         elif status != "":
-            me.text(f"Verdict: {status}", style=S.VERDICT_LABEL)
             if result["evidence"]:
-                with me.expansion_panel(title="View Evidence", icon="description"):
+                with me.expansion_panel(title=f"Verdict: {status}", icon="description"):
                     me.text(result["evidence"])
 
 @me.page(path="/app", title="CrossCheck", on_load=load, security_policy=me.SecurityPolicy(dangerously_disable_trusted_types=True))
@@ -39,9 +39,9 @@ def app():
         me.text("URL Cross-Check", type="headline-1", style=S.APP_HEADER)
         
         with me.box(style=S.INPUT_ROW):
-            me.input(label="Enter URL", value=state.url_input, on_input=on_url_input, style=S.INPUT_FIELD, appearance="outline")
+            me.input(label="Enter URL", value=state.url_input, on_input=on_url_input, style=S.INPUT_FIELD, appearance="outline", disabled=state.debate_active)
             with me.box(style=S.TOGGLE_BOX):
-                me.slide_toggle(label="Run Analysis", checked=state.debate_active, on_change=on_toggle_debate, color="primary")
+                me.slide_toggle(checked=state.debate_active, on_change=on_toggle_debate, color="primary", disabled=not state.url_input)
 
         with me.box(style=S.GRID_LAYOUT):
             for key, agent in state.agents.items():
