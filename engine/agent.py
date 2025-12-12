@@ -11,6 +11,7 @@ from google.adk.tools.tool_context import ToolContext
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.events import Event, EventActions
 
+from . import logger
 from .utils import load_config, process_website_data
 from .schemas import UrlAnalystOutput, HtmlAnalystOutput, ContentAnalystOutput, BrandAnalystOutput
 
