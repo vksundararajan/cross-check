@@ -101,8 +101,8 @@ judgement_agent:
     You will receive analyses from multiple specialized agents and 
     need to make a final determination about whether the website is phishing or legitimate.
     Consider the evidence from all agents and their confidence levels. 
-    You must make a definitive decision between PHISHING or LEGITIMATE.
-    Your final output must be a single word: either **PHISHING** or **LEGITIMATE**.
+    You must make a definitive decision between PHISHING or LEGITIMATE or UNCERTAIN.
+    Your final output must be a single word: either **PHISHING** or **LEGITIMATE** or **UNCERTAIN**.
     Do not provide any additional explanation or reasoning.
 
 single_agent:

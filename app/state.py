@@ -6,7 +6,7 @@ class State:
     url_input: str = ""
     final_verdict: str = ""
     is_analyzing: bool = False
-    debate_active: bool = False
+    debate_toggle: bool = False
     agents: dict[str, dict] = field(default_factory=lambda: {
         "url_analyst_agent": {
             "name": "URL Analyst", 

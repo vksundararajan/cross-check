@@ -22,6 +22,7 @@ def normalize_status(claim):
     claim = claim.upper()
     if "LEGITIMATE" in claim: return "LEGITIMATE"
     if "PHISHING" in claim: return "PHISHING"
+    if "INVALID URL" in claim: return "INVALID URL"
     return "UNCERTAIN"
 
 def set_all_agents(state, status, confidence=0.0, evidence=""):
@@ -57,8 +58,8 @@ def on_url_input(e: me.InputEvent):
 
 def on_toggle_debate(e: me.SlideToggleChangeEvent):
     state = me.state(State)
-    state.debate_active = not state.debate_active
-    if state.debate_active:
+    state.debate_toggle = not state.debate_toggle
+    if state.debate_toggle:
         yield from run_analysis_process()
     else:
         state.final_verdict = ""
@@ -76,11 +77,6 @@ def run_analysis_process():
 
     try:
         for event in interface.stream_analysis(state.url_input):
-            if not event.content and event.author == "url_preprocessing_agent":
-                set_all_agents(state, status="UNCERTAIN", confidence=0.0, evidence="Analysis skipped due to invalid URL")
-                state.final_verdict = "INVALID URL"
-                break
-            
             text = extract_event_text(event)
             if not text:
                 continue
@@ -88,6 +84,13 @@ def run_analysis_process():
             state_changed = False
             if event.author == "judgement_agent":
                 state.final_verdict = normalize_status(text)
+                if (state.final_verdict == "INVALID URL"):
+                    set_all_agents(
+                        state, 
+                        status="INVALID URL", 
+                        confidence=0.0, 
+                        evidence="Provided URL is invalid or could not be processed."
+                    )
                 state_changed = True
             elif event.author in state.agents:
                 state_changed = process_agent_response(state.agents[event.author], text)
@@ -97,17 +100,21 @@ def run_analysis_process():
 
     except Exception as e:
         state.final_verdict = "Error"
+        set_all_agents(
+            state, 
+            status="ERROR", 
+            confidence=0.0, 
+            evidence="An error occurred during analysis."
+        )
     
     if not state.final_verdict:
         state.final_verdict = "REQUEST TOO LARGE"
-        for agent in state.agents.values():
-            if agent["status"] == "PENDING":
-                agent.update({
-                    "status": "UNCERTAIN",
-                    "confidence": 0.0,
-                    "evidence": "Processing incomplete due to rate limit.",
-                    "raw_buffer": ""
-                })
-    
+        set_all_agents(
+            state, 
+            status="UNCERTAIN", 
+            confidence=0.0, 
+            evidence="Processing incomplete due to rate limit."
+        )
+
     state.is_analyzing = False
     yield

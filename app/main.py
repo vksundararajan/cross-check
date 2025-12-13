@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
-import app.logger
+import app.config
 
 import mesop as me
 from app.state import State
@@ -39,9 +39,9 @@ def app():
         me.text("URL Cross-Check", type="headline-1", style=S.APP_HEADER)
         
         with me.box(style=S.INPUT_ROW):
-            me.input(label="Enter URL", value=state.url_input, on_input=on_url_input, style=S.INPUT_FIELD, appearance="outline", disabled=state.debate_active)
+            me.input(label="Enter URL", value=state.url_input, on_input=on_url_input, style=S.INPUT_FIELD, appearance="outline", disabled=state.debate_toggle)
             with me.box(style=S.TOGGLE_BOX):
-                me.slide_toggle(checked=state.debate_active, on_change=on_toggle_debate, color="primary", disabled=not state.url_input)
+                me.slide_toggle(checked=state.debate_toggle, on_change=on_toggle_debate, color="primary", disabled=not state.url_input)
 
         with me.box(style=S.GRID_LAYOUT):
             for key, agent in state.agents.items():
