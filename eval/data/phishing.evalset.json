@@ -1,16 +1,16 @@
 {
-    "eval_set_id": "evalset71eaf6",
-    "name": "evalset71eaf6",
+    "eval_set_id": "evalsetbeffd4",
+    "name": "evalsetbeffd4",
     "eval_cases": [
         {
-            "eval_id": "case2f98c7",
+            "eval_id": "case29cb16",
             "conversation": [
                 {
-                    "invocation_id": "e-7c3ed005-2180-4afe-b567-f71abf97f961",
+                    "invocation_id": "e-90881b0d-5804-4fa4-a8d9-a3a7edd6057f",
                     "user_content": {
                         "parts": [
                             {
-                                "text": "http://0000094.repl.co"
+                                "text": "http://www.testingmcafeesites.com/testcat_ph.html"
                             }
                         ],
                         "role": "user"
@@ -31,7 +31,7 @@
                                     "parts": [
                                         {
                                             "function_call": {
-                                                "id": "etf6dt7df",
+                                                "id": "yzpxcx0rt",
                                                 "name": "exit_loop"
                                             }
                                         }
@@ -45,7 +45,7 @@
                                     "parts": [
                                         {
                                             "function_response": {
-                                                "id": "etf6dt7df",
+                                                "id": "yzpxcx0rt",
                                                 "name": "exit_loop",
                                                 "response": {}
                                             }

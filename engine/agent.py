@@ -2,11 +2,12 @@ import re
 import validators
 import litellm
 
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 from google.adk.apps.app import App
 from google.genai import types
 from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent, ParallelAgent
 from google.adk.agents.invocation_context import InvocationContext
+from google.adk.agents.callback_context import CallbackContext
 from google.adk.tools.tool_context import ToolContext
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.events import Event, EventActions
@@ -19,12 +20,23 @@ litellm.request_timeout = 120
 litellm.num_retries = 5
 config = load_config()
 
+# ---------------------- Callback: URL Validation Guard ---------------------- #
+def url_validation_callback(callback_context: CallbackContext) -> Optional[types.Content]:
+    """Skip agent execution if URL validation failed."""
+    if not callback_context.state.get("skip_llm_agent", False):
+        return types.Content(
+            role="model",
+            parts=[types.Part(text="INVALID URL")]
+        )
+    return None
+
 # -------------------------------- Judge Agent ------------------------------- #
 judgement_agent = LlmAgent(
     model=LiteLlm(model=config["judgement_agent"]["model"]),
     name=config["judgement_agent"]["name"],
     description=config["judgement_agent"]["description"],
     instruction=config["judgement_agent"]["instruction"],
+    before_agent_callback=url_validation_callback,
 )
 
 # -------------------------- Custom Tool: Exit Loop -------------------------- #
@@ -42,7 +54,7 @@ moderator_agent = LlmAgent(
     name=config["moderator_agent"]["name"],
     description=config["moderator_agent"]["description"],
     instruction=config["moderator_agent"]["instruction"],
-    tools=[exit_loop],
+    tools=[exit_loop]
 )
 
 # ------------------------ Debate Agents: Specialists ------------------------ #
@@ -97,7 +109,8 @@ debate_loop = LoopAgent(
         ),
         moderator_agent
     ],
-    max_iterations=3
+    max_iterations=3,
+    before_agent_callback=url_validation_callback
 )
 
 # ---------------------- Custom Agent: URL Preprocessor ---------------------- #
@@ -133,19 +146,20 @@ class UrlPreProcessor(BaseAgent):
             ctx.session.state["target_url"] = url
             ctx.session.state["html_content"] = cleaned_html
             ctx.session.state["visible_text"] = visible_text
+            ctx.session.state["skip_llm_agent"] = True
             
         except Exception as e:
-            yield Event(author=self.name, actions=EventActions(escalate=True))
+            ctx.session.state["skip_llm_agent"] = False
+            yield Event(author=self.name)
 
 # ------------------------------- Main Pipeline ------------------------------ #
-cross_check_pipeline = LoopAgent(
+cross_check_pipeline = SequentialAgent(
     name="cross_check_pipeline",
     sub_agents=[
         UrlPreProcessor(name="url_preprocessing_agent"),
         debate_loop,
         judgement_agent
-    ],
-    max_iterations=1
+    ]
 )
 
 root_agent = cross_check_pipeline

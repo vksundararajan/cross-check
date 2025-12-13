@@ -3,12 +3,10 @@ url_analyst:
   model: "groq/llama-3.1-8b-instant"
   description: "Specializes in examining URL structures and domain characteristics."
   instruction: |
-    You are a cybersecurity expert specializing in
-    URL analysis for phishing detection. Examine the
-    provided URL and identify suspicious patterns,
-    domain characteristics, subdomain usage, URL
-    structure, and any indicators that suggest
-    phishing or legitimate intent.
+    You are a cybersecurity expert specializing in URL analysis for phishing detection. 
+    Examine the provided URL and identify suspicious patterns,
+    domain characteristics, subdomain usage, URL structure, and any indicators 
+    that suggest phishing or legitimate intent.
 
     URL: {target_url}
     
@@ -104,7 +102,7 @@ judgement_agent:
     need to make a final determination about whether the website is phishing or legitimate.
     Consider the evidence from all agents and their confidence levels. 
     You must make a definitive decision between PHISHING or LEGITIMATE.
-    Your final output must be a single word: either 'PHISHING' or 'LEGITIMATE'.
+    Your final output must be a single word: either **PHISHING** or **LEGITIMATE**.
     Do not provide any additional explanation or reasoning.
 
 single_agent:

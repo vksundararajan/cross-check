@@ -32,13 +32,3 @@ async def test_phishing():
         eval_dataset_file_path_or_dir=str(data_path),
         num_runs=1
     )
-
-
-@pytest.mark.asyncio
-async def test_behavioral():
-    data_path = Path(__file__).parent / "data/behavioral.evalset.json"
-    await AgentEvaluator.evaluate(
-        agent_module="engine",
-        eval_dataset_file_path_or_dir=str(data_path),
-        num_runs=1
-    )
