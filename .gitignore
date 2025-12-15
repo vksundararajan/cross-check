@@ -11,3 +11,4 @@ wheels/
 
 # IDE-generated files
 .env
+/htmlcov
