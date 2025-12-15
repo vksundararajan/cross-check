@@ -5,14 +5,12 @@ from google.adk.evaluation.agent_evaluator import AgentEvaluator
 
 pytest_plugins = ("pytest_asyncio",)
 
-
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
     env_path = Path(__file__).parent.parent / ".env"
     if not env_path.exists():
         env_path = ".env"
     dotenv.load_dotenv(str(env_path))
-
 
 @pytest.mark.asyncio
 async def test_legitimate():
@@ -22,7 +20,6 @@ async def test_legitimate():
         eval_dataset_file_path_or_dir=str(data_path),
         num_runs=1
     )
-
 
 @pytest.mark.asyncio
 async def test_phishing():

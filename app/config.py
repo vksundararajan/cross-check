@@ -1,6 +1,6 @@
 import debugpy
 debugpy.listen(5678)
-print("Debugger Enabled...\n")
+print("Mesop Debugger Enabled...\n")
 
 import logging
 import litellm
