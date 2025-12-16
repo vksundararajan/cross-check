@@ -1,0 +1,145 @@
+<svg width="908pt" height="471pt" viewBox="0.00 0.00 908.00 471.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 467)">
+<polygon fill="#333537" stroke="none" points="-4,4 -4,-467 904.23,-467 904.23,4 -4,4" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-background-333537, #282b2d); --darkreader-inline-stroke: none;"></polygon>
+<g id="clust1" class="cluster">
+<title>cluster_cross_check_pipeline (Sequential Agent)</title>
+<path fill="#333537" stroke="#ffffff" d="M20,-44C20,-44 880.23,-44 880.23,-44 886.23,-44 892.23,-50 892.23,-56 892.23,-56 892.23,-443 892.23,-443 892.23,-449 886.23,-455 880.23,-455 880.23,-455 20,-455 20,-455 14,-455 8,-449 8,-443 8,-443 8,-56 8,-56 8,-50 14,-44 20,-44" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-background-333537, #282b2d); --darkreader-inline-stroke: var(--darkreader-text-ffffff, #e8e6e3);"></path>
+<text xml:space="preserve" text-anchor="middle" x="450.11" y="-438.4" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">cross_check_pipeline (Sequential Agent)</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_debate_loop_agent (Loop Agent)</title>
+<path fill="#333537" stroke="#ffffff" d="M488.02,-52C488.02,-52 872.23,-52 872.23,-52 878.23,-52 884.23,-58 884.23,-64 884.23,-64 884.23,-366 884.23,-366 884.23,-372 878.23,-378 872.23,-378 872.23,-378 488.02,-378 488.02,-378 482.02,-378 476.02,-372 476.02,-366 476.02,-366 476.02,-64 476.02,-64 476.02,-58 482.02,-52 488.02,-52" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-background-333537, #282b2d); --darkreader-inline-stroke: var(--darkreader-text-ffffff, #e8e6e3);"></path>
+<text xml:space="preserve" text-anchor="middle" x="680.12" y="-361.4" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">debate_loop_agent (Loop Agent)</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_specialists_group (Parallel Agent)</title>
+<path fill="#333537" stroke="#ffffff" d="M496.02,-106C496.02,-106 749.85,-106 749.85,-106 755.85,-106 761.85,-112 761.85,-118 761.85,-118 761.85,-333 761.85,-333 761.85,-339 755.85,-345 749.85,-345 749.85,-345 496.02,-345 496.02,-345 490.02,-345 484.02,-339 484.02,-333 484.02,-333 484.02,-118 484.02,-118 484.02,-112 490.02,-106 496.02,-106" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-background-333537, #282b2d); --darkreader-inline-stroke: var(--darkreader-text-ffffff, #e8e6e3);"></path>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-328.4" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">specialists_group (Parallel Agent)</text>
+</g>
+<!-- url_preprocessing_agent -->
+<g id="node1" class="node">
+<title>url_preprocessing_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="134.04" cy="-240" rx="118.04" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="134.04" y="-235.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 url_preprocessing_agent</text>
+</g>
+<!-- debate_loop_agent -->
+<g id="node2" class="node">
+<title>debate_loop_agent</title>
+<ellipse fill="none" stroke="black" cx="372.05" cy="-240" rx="83.97" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-000000, #e8e6e3);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="372.05" y="-235.8" font-family="Times,serif" font-size="14.00">debate_loop_agent</text>
+</g>
+<!-- url_preprocessing_agent&#45;&gt;debate_loop_agent -->
+<g id="edge1" class="edge">
+<title>url_preprocessing_agent-&gt;debate_loop_agent</title>
+<path fill="none" stroke="#cccccc" d="M252.35,-240C260.36,-240 268.37,-240 276.23,-240" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="276.13,-243.5 286.13,-240 276.13,-236.5 276.13,-243.5" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- judgement_agent -->
+<g id="node3" class="node">
+<title>judgement_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-404" rx="89.61" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-399.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 judgement_agent</text>
+</g>
+<!-- debate_loop_agent&#45;&gt;judgement_agent -->
+<g id="edge2" class="edge">
+<title>debate_loop_agent-&gt;judgement_agent</title>
+<path fill="none" stroke="#cccccc" d="M385.75,-257.84C403.51,-281.62 437.87,-323.62 476.02,-349 500.08,-365.01 529.44,-377.23 555.51,-386.04" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="554.42,-389.37 565.01,-389.14 556.59,-382.71 554.42,-389.37" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- url_analyst_agent -->
+<g id="node6" class="node">
+<title>url_analyst_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-132" rx="91.76" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-127.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 url_analyst_agent</text>
+</g>
+<!-- debate_loop_agent&#45;&gt;url_analyst_agent -->
+<g id="edge6" class="edge">
+<title>debate_loop_agent-&gt;url_analyst_agent</title>
+<path fill="none" stroke="#cccccc" d="M390.21,-222.09C409.33,-203.29 442.03,-174.37 476.02,-159 492.44,-151.57 510.79,-146.19 528.78,-142.28" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="529.33,-145.74 538.44,-140.34 527.94,-138.88 529.33,-145.74" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- html_structure_agent -->
+<g id="node7" class="node">
+<title>html_structure_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-186" rx="105.17" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-181.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 html_structure_agent</text>
+</g>
+<!-- debate_loop_agent&#45;&gt;html_structure_agent -->
+<g id="edge7" class="edge">
+<title>debate_loop_agent-&gt;html_structure_agent</title>
+<path fill="none" stroke="#cccccc" d="M424.98,-225.59C441.26,-221.28 459.33,-216.73 476.02,-213 495.34,-208.69 516.21,-204.53 535.96,-200.82" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="536.43,-204.29 545.62,-199.03 535.15,-197.41 536.43,-204.29" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- content_semantic_agent -->
+<g id="node8" class="node">
+<title>content_semantic_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-240" rx="116.42" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-235.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 content_semantic_agent</text>
+</g>
+<!-- debate_loop_agent&#45;&gt;content_semantic_agent -->
+<g id="edge8" class="edge">
+<title>debate_loop_agent-&gt;content_semantic_agent</title>
+<path fill="none" stroke="#cccccc" d="M456.27,-240C468.85,-240 482.07,-240 495.33,-240" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="494.94,-243.5 504.94,-240 494.94,-236.5 494.94,-243.5" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- brand_impersonation_agent -->
+<g id="node9" class="node">
+<title>brand_impersonation_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-294" rx="130.91" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-289.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 brand_impersonation_agent</text>
+</g>
+<!-- debate_loop_agent&#45;&gt;brand_impersonation_agent -->
+<g id="edge9" class="edge">
+<title>debate_loop_agent-&gt;brand_impersonation_agent</title>
+<path fill="none" stroke="#cccccc" d="M424.98,-254.41C441.26,-258.72 459.33,-263.27 476.02,-267 492.72,-270.73 510.59,-274.34 527.88,-277.65" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="527.19,-281.08 537.66,-279.49 528.48,-274.2 527.19,-281.08" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- specialists_group -->
+<g id="node4" class="node">
+<title>specialists_group</title>
+<ellipse fill="none" stroke="black" cx="372.05" cy="-74" rx="78.09" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-000000, #e8e6e3);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="372.05" y="-69.8" font-family="Times,serif" font-size="14.00">specialists_group</text>
+</g>
+<!-- moderator_agent -->
+<g id="node5" class="node">
+<title>moderator_agent</title>
+<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-78" rx="88.53" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="622.93" y="-73.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 moderator_agent</text>
+</g>
+<!-- specialists_group&#45;&gt;moderator_agent -->
+<g id="edge3" class="edge">
+<title>specialists_group-&gt;moderator_agent</title>
+<path fill="none" stroke="#cccccc" d="M444.03,-81.3C469.67,-82.31 499.04,-82.93 526.43,-83.05" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="526.1,-86.55 536.11,-83.07 526.12,-79.55 526.1,-86.55" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- moderator_agent&#45;&gt;specialists_group -->
+<g id="edge4" class="edge">
+<title>moderator_agent-&gt;specialists_group</title>
+<path fill="none" stroke="#cccccc" d="M541.91,-70.36C515.36,-69.44 485.71,-68.93 458.75,-68.93" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="458.89,-65.43 448.9,-68.95 458.9,-72.43 458.89,-65.43" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+<!-- exit_loop -->
+<g id="node10" class="node">
+<title>exit_loop</title>
+<path fill="none" stroke="#cccccc" d="M864.23,-96C864.23,-96 801.85,-96 801.85,-96 795.85,-96 789.85,-90 789.85,-84 789.85,-84 789.85,-72 789.85,-72 789.85,-66 795.85,-60 801.85,-60 801.85,-60 864.23,-60 864.23,-60 870.23,-60 876.23,-66 876.23,-72 876.23,-72 876.23,-84 876.23,-84 876.23,-90 870.23,-96 864.23,-96" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<text xml:space="preserve" text-anchor="middle" x="833.04" y="-73.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🔧 exit_loop</text>
+</g>
+<!-- moderator_agent&#45;&gt;exit_loop -->
+<g id="edge5" class="edge">
+<title>moderator_agent-&gt;exit_loop</title>
+<path fill="none" stroke="#cccccc" d="M711.89,-78C738.73,-78 767.04,-78 789.43,-78" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+</g>
+<!-- cross_check_pipeline -->
+<g id="node11" class="node">
+<title>cross_check_pipeline</title>
+<ellipse fill="none" stroke="black" cx="134.04" cy="-18" rx="94.16" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-000000, #e8e6e3);"></ellipse>
+<text xml:space="preserve" text-anchor="middle" x="134.04" y="-13.8" font-family="Times,serif" font-size="14.00">cross_check_pipeline</text>
+</g>
+<!-- cross_check_pipeline&#45;&gt;specialists_group -->
+<g id="edge10" class="edge">
+<title>cross_check_pipeline-&gt;specialists_group</title>
+<path fill="none" stroke="#cccccc" d="M205.19,-30.09C220.69,-33.07 236.98,-36.43 252.07,-40 272,-44.71 293.57,-50.62 312.81,-56.19" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></path>
+<polygon fill="#cccccc" stroke="#cccccc" points="311.8,-59.55 322.38,-59 313.77,-52.83 311.8,-59.55" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc); --darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></polygon>
+</g>
+</g>
+</svg>

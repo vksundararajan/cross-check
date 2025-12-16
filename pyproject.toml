@@ -16,4 +16,5 @@ dependencies = [
     "mesop>=1.1.1",
     "debugpy>=1.8.18",
     "pytest-cov>=7.0.0",
+    "gunicorn>=23.0.0",
 ]

@@ -32,7 +32,15 @@ def agent_card(key: str, result: dict):
                 with me.expansion_panel(title=f"Verdict: {status}", icon="description"):
                     me.text(result["evidence"])
 
-@me.page(path="/app", title="CrossCheck", on_load=load, security_policy=me.SecurityPolicy(dangerously_disable_trusted_types=True))
+@me.page(
+    path="/app",
+    title="CrossCheck",
+    on_load=load,
+    security_policy=me.SecurityPolicy(
+        dangerously_disable_trusted_types=True,
+        allowed_iframe_parents=["https://huggingface.co"]
+    )
+)
 def app():
     state = me.state(State)
     with me.box(style=S.APP_CONTAINER):
