@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Sundararajan"
+    given-names: "Vigneshwar"
+title: "Cross-Check"
+repository-code: "https://github.com/vksundararajan/cross-check"
+license: MIT
+references:
+  - type: article
+    authors:
+      - family-names: "Li"
+        given-names: "Wenhao"
+      - family-names: "Manickam"
+        given-names: "Selvakumar"
+      - family-names: "Chong"
+        given-names: "Yung-Wey"
+      - family-names: "Karuppayah"
+        given-names: "Shankar"
+    title: "PhishDebate: An LLM-Based Multi-Agent Framework for Phishing Website Detection"
+    journal: "arXiv preprint arXiv:2506.15656"
+    year: 2025
+    url: "https://arxiv.org/abs/2506.15656"
