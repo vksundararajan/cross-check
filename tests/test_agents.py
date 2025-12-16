@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from google.adk.events import Event
 from google.genai import types
-from engine.agent import UrlPreProcessor, url_validation_callback
+from engine.agent import UrlPreProcessor, url_validation_callback, exit_loop
 
 @pytest.mark.asyncio
 async def test_url_preprocessor_valid_url():
@@ -71,3 +71,14 @@ def test_url_validation_callback_block_default():
     
     assert isinstance(result, types.Content)
     assert result.parts[0].text == "INVALID URL"
+
+def test_exit_loop_sets_escalate():
+    """Test that exit_loop sets the escalate flag on tool context."""
+    mock_tool_ctx = MagicMock()
+    mock_tool_ctx.actions = MagicMock()
+    mock_tool_ctx.actions.escalate = False
+    
+    result = exit_loop(mock_tool_ctx)
+    
+    assert mock_tool_ctx.actions.escalate is True
+    assert result == {}

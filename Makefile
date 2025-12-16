@@ -47,3 +47,4 @@ clean:
 	rm -rf .pytest_cache
 	rm -rf htmlcov
 	rm -rf .coverage
+	rm -rf .coverage.xml

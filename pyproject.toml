@@ -18,3 +18,8 @@ dependencies = [
     "pytest-cov>=7.0.0",
     "gunicorn>=23.0.0",
 ]
+
+[tool.coverage.run]
+omit = [
+    "engine/interface.py"
+]

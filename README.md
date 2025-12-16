@@ -10,6 +10,8 @@ app_port: 9200
 
 # Cross-Check 
 
+[![Tests](https://github.com/vksundararajan/cross-check/actions/workflows/tests.yml/badge.svg)](https://github.com/vksundararajan/cross-check/actions/workflows/tests.yml)
+
 **A Multi-Agent System for Cross-Checking Phishing URLs.**
 
 Cross-Check is an advanced phishing detection framework powered by Large Language Models (LLMs). Built using **Google's Agent Development Kit (ADK)** and **Mesop**, it implements a "debate" mechanism where multiple specialized AI agents analyze a website from different perspectives before reaching a consensus on its legitimacy.
@@ -124,6 +126,28 @@ make serve
 ```bash
 docker build -t cross-check .
 docker run -p 9200:9200 -e GROQ_API_KEY=$GROQ_API_KEY cross-check
+```
+
+## 🧪 Testing
+
+Unit tests run automatically on every push via GitHub Actions. View the workflow status badge at the top of this README.
+
+**Viewing Coverage Reports from GitHub:**
+
+1. Go to **Actions** → click on a workflow run
+2. Download the `coverage-report` artifact
+3. Extract and serve locally:
+   ```bash
+   cd coverage-report
+   python -m http.server 8000
+   ```
+4. Open [http://localhost:8000/index.html](http://localhost:8000/index.html) in your browser
+
+**Full Coverage (including integration tests):**
+
+Integration tests require LLM API keys. Run locally with:
+```bash
+make coverage
 ```
 
 ## 📚 Reference
