@@ -4,6 +4,7 @@ from dataclasses import field
 @me.stateclass
 class State:
     url_input: str = ""
+    input_key: int = 0
     final_verdict: str = ""
     is_analyzing: bool = False
     debate_toggle: bool = False

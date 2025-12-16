@@ -35,6 +35,15 @@ The system utilizes a sequential pipeline governed by a debate loop.
 
 ![Workflow](docs/workflow.svg)
 
+## 🎬 Demo
+
+See Cross-Check in action:
+
+- [Legitimate URL](https://drive.google.com/file/d/1BEXijEKWZekePnhDeSRz5Jr8ArxNpAWR/view?usp=sharing) – Analysis of a safe website
+- [Phishing URL](https://drive.google.com/file/d/1Ee7GTv1ILAujIBbkOEwev1UR1AKucJwH/view?usp=sharing) – Detection of a phishing attempt
+- [Invalid URL](https://drive.google.com/file/d/1SoWQJE2viHIgWb6HxGMAVe9u7VljcUvM/view?usp=sharing) – Handling of invalid URLs
+- [Rate Limit](https://drive.google.com/file/d/19PU33FarSP7mqV9AIlMAlr30Xq6E9fBZ/view?usp=sharing) – Graceful handling of API limits
+
 
 ## 🤖 The Agentic Pipeline
 

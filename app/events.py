@@ -62,6 +62,8 @@ def on_toggle_debate(e: me.SlideToggleChangeEvent):
     if state.debate_toggle:
         yield from run_analysis_process()
     else:
+        state.url_input = ""
+        state.input_key += 1
         state.final_verdict = ""
         state.is_analyzing = False
         set_all_agents(state, status="", confidence=0.0, evidence="")
