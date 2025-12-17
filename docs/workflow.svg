@@ -37,7 +37,7 @@
 <!-- judgement_agent -->
 <g id="node3" class="node">
 <title>judgement_agent</title>
-<ellipse fill="none" stroke="#cccccc" cx="622.93" cy="-404" rx="89.61" ry="18" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);"></ellipse>
+<ellipse fill="#0f5223" stroke="#0f5223" cx="622.93" cy="-404" rx="89.61" ry="18" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: var(--darkreader-background-0f5223, #0c421c); --darkreader-inline-stroke: var(--darkreader-text-0f5223, #c9c5be);"></ellipse>
 <text xml:space="preserve" text-anchor="middle" x="622.93" y="-399.8" font-family="Times,serif" font-size="14.00" fill="#cccccc" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-text-cccccc, #c8c3bc);">🤖 judgement_agent</text>
 </g>
 <!-- debate_loop_agent&#45;&gt;judgement_agent -->

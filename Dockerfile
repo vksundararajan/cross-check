@@ -18,5 +18,5 @@ USER mesop
 COPY --chown=mesop:mesop . /srv/app
 WORKDIR /srv/app
 
-# Run with gunicorn on port 9200
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:9200", "app.main:me"]
+# Run with gunicorn on port 7860
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:7860", "app.main:me"]

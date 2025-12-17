@@ -1,13 +1,3 @@
----
-title: Cross-Check
-emoji: 🔍
-colorFrom: yellow
-colorTo: blue
-sdk: docker
-license: mit
-app_port: 9200
----
-
 # Cross-Check 
 
 [![Tests](https://github.com/vksundararajan/cross-check/actions/workflows/tests.yml/badge.svg)](https://github.com/vksundararajan/cross-check/actions/workflows/tests.yml)
@@ -29,13 +19,7 @@ Instead of asking one model "Is this phishing?", Cross-Check convenes a panel of
 
 These agents debate their findings under the supervision of a **Moderator**, and a **Judge** delivers the final verdict.
 
-## 🏗️ Architecture & Workflow
-
-The system utilizes a sequential pipeline governed by a debate loop.
-
-![Workflow](docs/workflow.svg)
-
-## 🎬 Demo
+##  Demo
 
 See Cross-Check in action:
 
@@ -43,44 +27,6 @@ See Cross-Check in action:
 - [Phishing URL](https://drive.google.com/file/d/1Ee7GTv1ILAujIBbkOEwev1UR1AKucJwH/view?usp=sharing) – Detection of a phishing attempt
 - [Invalid URL](https://drive.google.com/file/d/1SoWQJE2viHIgWb6HxGMAVe9u7VljcUvM/view?usp=sharing) – Handling of invalid URLs
 - [Rate Limit](https://drive.google.com/file/d/19PU33FarSP7mqV9AIlMAlr30Xq6E9fBZ/view?usp=sharing) – Graceful handling of API limits
-
-
-## 🤖 The Agentic Pipeline
-
-Cross-Check operates on a sophisticated `SequentialAgent` architecture powered by Google ADK. The pipeline simulates a panel of cybersecurity experts debating the legitimacy of a website.
-
-The system processes a request in three distinct stages:
-
-### 1\. Ingestion & Preprocessing
-
-**Agent:** `UrlPreProcessor` – Before any AI analysis occurs, this custom Python agent executes deterministic validation:
-
-  * **Validation:** Verifies the URL format and reachability.
-  * **Extraction:** Scrapes the target website, cleaning the raw HTML and extracting visible text.
-  * **Context Injection:** Places the sanitized data into the session state, ensuring all subsequent agents analyze the exact same snapshot of the site.
-
-### 2\. The Debate Loop
-
-**Agent:** `LoopAgent` – containing a `ParallelAgent` & `Moderator`
-This is the core reasoning engine. Instead of a single pass, the system enters an iterative cycle:
-
-  * **Parallel Analysis:** Four specialist agents (`UrlAnalyst`, `HtmlAnalyst`, `ContentAnalyst`, `BrandAnalyst`) analyze the website simultaneously. Each focuses solely on its domain (e.g., the URL analyst looks for typosquatting, while the HTML analyst looks for obfuscated scripts).
-  * **Moderator Review:** The `ModeratorAgent` aggregates the specialists' outputs. It evaluates if a consensus exists.
-  * **Dynamic Flow:**
-      * If the team agrees, the Moderator calls the `exit_loop` tool to break the cycle.
-      * If there is disagreement (e.g., URL looks fine but Content is suspicious), the Moderator triggers another round, forcing agents to re-evaluate based on peer feedback.
-
-### 3\. Final Judgment
-
-**Agent:** `JudgementAgent` – Once the debate concludes (either via consensus or reaching the maximum iteration limit), the Judge reviews the entire conversation history. It weighs the final arguments from all specialists and delivers the authoritative `PHISHING` or `LEGITIMATE` verdict.
-
-## ✨ Features
-
-  * **Google ADK Integration:** Scalable and modular agent orchestration.
-  * **Mesop UI:** A clean, Python-native web interface.
-  * **Model Agnostic:** Uses **LiteLLM** to route requests to models like Llama 3, GPT-4, or Gemini.
-  * **Debate Capability:** Implements multi-round reasoning to reduce false positives.
-  * **Robust Evaluation:** Integrated Pytest suite for benchmarking and unit testing.
 
 ## 🚀 Getting Started
 
@@ -134,7 +80,99 @@ make serve
 
 ```bash
 docker build -t cross-check .
-docker run -p 9200:9200 -e GROQ_API_KEY=$GROQ_API_KEY cross-check
+docker run -p 7860:7860 -e GROQ_API_KEY=$GROQ_API_KEY cross-check
+```
+
+## ✨ Features
+
+  * **Google ADK Integration:** Scalable and modular agent orchestration.
+  * **Mesop UI:** A clean, Python-native web interface.
+  * **Model Agnostic:** Uses **LiteLLM** to route requests to models like Llama 3, GPT-4, or Gemini.
+  * **Debate Capability:** Implements multi-round reasoning to reduce false positives.
+  * **Robust Evaluation:** Integrated Pytest suite for benchmarking and unit testing.
+
+## 🏗️ Architecture & Workflow
+
+The system utilizes a sequential pipeline governed by a debate loop.
+
+![Workflow](docs/workflow.svg)
+
+## 🤖 The Agentic Pipeline
+
+Cross-Check operates on a sophisticated `SequentialAgent` architecture powered by Google ADK. The pipeline simulates a panel of cybersecurity experts debating the legitimacy of a website.
+
+The system processes a request in three distinct stages:
+
+### 1\. Ingestion & Preprocessing
+
+**Agent:** `UrlPreProcessor` – Before any AI analysis occurs, this custom Python agent executes deterministic validation:
+
+  * **Validation:** Verifies the URL format and reachability.
+  * **Extraction:** Scrapes the target website, cleaning the raw HTML and extracting visible text.
+  * **Context Injection:** Places the sanitized data into the session state, ensuring all subsequent agents analyze the exact same snapshot of the site.
+
+### 2\. The Debate Loop
+
+**Agent:** `LoopAgent` – containing a `ParallelAgent` & `Moderator`
+This is the core reasoning engine. Instead of a single pass, the system enters an iterative cycle:
+
+  * **Parallel Analysis:** Four specialist agents (`UrlAnalyst`, `HtmlAnalyst`, `ContentAnalyst`, `BrandAnalyst`) analyze the website simultaneously. Each focuses solely on its domain (e.g., the URL analyst looks for typosquatting, while the HTML analyst looks for obfuscated scripts).
+  * **Moderator Review:** The `ModeratorAgent` aggregates the specialists' outputs. It evaluates if a consensus exists.
+  * **Dynamic Flow:**
+      * If the team agrees, the Moderator calls the `exit_loop` tool to break the cycle.
+      * If there is disagreement (e.g., URL looks fine but Content is suspicious), the Moderator triggers another round, forcing agents to re-evaluate based on peer feedback.
+
+### 3\. Final Judgment
+
+**Agent:** `JudgementAgent` – Once the debate concludes (either via consensus or reaching the maximum iteration limit), the Judge reviews the entire conversation history. It weighs the final arguments from all specialists and delivers the authoritative `PHISHING` or `LEGITIMATE` verdict.
+
+## 📁 Project Structure
+
+```
+cross-check/
+├── .env.example                     # API key template file
+├── .github/
+│   └── workflows/
+│       └── tests.yml                # CI test automation workflow
+├── .gitignore
+├── .python-version
+├── .vscode/
+│   └── launch.json                  # VS Code debugger config
+├── CITATION.cff                     # Academic citation metadata
+├── Dockerfile                       # Container build instructions
+├── LICENSE
+├── Makefile                         # Project command shortcuts
+├── README.md
+├── app/
+│   ├── config.py                    # Debug and logging settings
+│   ├── events.py                    # UI event handlers
+│   ├── main.py                      # Mesop app entry point
+│   ├── state.py                     # UI state management
+│   └── styles.py                    # Component styling rules
+├── engine/
+│   ├── __init__.py
+│   ├── agent.py                     # Multi-agent pipeline definition
+│   ├── config.yaml                  # Agent prompts and models
+│   ├── interface.py                 # Runner and streaming API
+│   ├── schemas.py                   # Pydantic output schemas
+│   └── utils.py                     # URL fetching and parsing
+├── docs/
+│   ├── invalid.mov                  # Invalid URL demo video
+│   ├── legitimate.mov               # Legitimate site demo video
+│   ├── phishing.mov                 # Phishing detection demo video
+│   ├── rate-limit.mov               # Rate limit demo video
+│   └── workflow.svg                 # Architecture diagram
+├── eval/
+│   ├── data/
+│   │   ├── legitimate.evalset.json  # Legitimate eval dataset
+│   │   ├── phishing.evalset.json    # Phishing eval dataset
+│   │   └── test_config.json         # Evaluation config
+│   └── test_eval.py                 # Agent evaluation tests
+├── pyproject.toml
+├── tests/
+│   ├── test_agents.py               # Agent unit tests
+│   └── test_utils.py                # Utility function tests
+└── uv.lock
 ```
 
 ## 🧪 Testing
