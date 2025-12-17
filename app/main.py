@@ -71,3 +71,14 @@ def app():
             with me.box(style=S.verdict_box(state.final_verdict)):
                 me.text(f"FINAL VERDICT: {state.final_verdict}", type="headline-4")
                 me.text("The high council has spoken.", type="subtitle-1")
+
+    with me.box(style=me.Style(
+        position="fixed",
+        bottom=0,
+        left=0,
+        width="100%",
+        padding=me.Padding.all(12),
+        background="rgba(30, 30, 30, 0.95)",
+        text_align="center"
+    )):
+        me.text("Cross-Check can make mistakes, so double-check it", type="caption", style=me.Style(color="#ccc"))
