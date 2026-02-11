@@ -1,0 +1,274 @@
+manifest:
+  version: "0.1.3"
+  schema: https://a2as.org/cert/schema
+  subject:
+    name: vksundararajan/cross-check
+    source: https://github.com/vksundararajan/cross-check
+    branch: main
+    commit: "e8c74389"
+    scope: [app/events.py, app/main.py, app/state.py, engine/agent.py, engine/schemas.py, engine/utils.py]
+  issued:
+    by: A2AS.org
+    at: '2026-02-11T17:06:46Z'
+    url: https://a2as.org/certified/agents/vksundararajan/cross-check
+  signatures:
+    digest: sha256:P2RcoEAVfJTgKZJxfoBlWw_HXZGhnJqbxIzep-juiSA
+    key: ed25519:IFwJ4KAoiUIJshMwVhLlpHL1KPICClJf77hcUAwGQyU
+    sig: ed25519:flgXnwgxpD-MYYYGnyjzHM5gR18ICB4WLbOK6FmbgB5WapxCbb-mkgzTz4kDwKiquOJQK6cCzwVvbk66Yxp6Cg
+
+agents:
+  agent.UrlPreProcessor:
+    type: class
+    models: [gemini-2.5-flash]
+    params:
+      class: UrlPreProcessor
+      base: BaseAgent
+      name: name
+  brand_analyst_agent:
+    type: instance
+    models: ['config[brand_analyst]["model"]']
+    params:
+      name: config[brand_analyst][name]
+      description: config[brand_analyst][description]
+      instruction: config[brand_analyst][instruction]
+      output_schema: BrandAnalystOutput
+      output_key: brand_assessment
+  content_analyst_agent:
+    type: instance
+    models: ['config[content_analyst]["model"]']
+    params:
+      name: config[content_analyst][name]
+      description: config[content_analyst][description]
+      instruction: config[content_analyst][instruction]
+      output_schema: ContentAnalystOutput
+      output_key: content_assessment
+  cross_check_pipeline:
+    type: instance
+    params:
+      name: cross_check_pipeline
+      sub_agents: [url_preprocessing_agent, debate_loop, judgement_agent]
+  debate_loop:
+    type: instance
+    params:
+      name: debate_loop_agent
+      max_iterations: "3"
+      before_agent_callback: url_validation_callback
+      sub_agents: [specialists_group, moderator_agent]
+  html_analyst_agent:
+    type: instance
+    models: ['config[html_analyst]["model"]']
+    params:
+      name: config[html_analyst][name]
+      description: config[html_analyst][description]
+      instruction: config[html_analyst][instruction]
+      output_schema: HtmlAnalystOutput
+      output_key: html_assessment
+  judgement_agent:
+    type: instance
+    models: ['config[judgement_agent]["model"]']
+    params:
+      name: config[judgement_agent][name]
+      description: config[judgement_agent][description]
+      instruction: config[judgement_agent][instruction]
+      before_agent_callback: url_validation_callback
+  moderator_agent:
+    type: instance
+    models: ['config[moderator_agent]["model"]']
+    tools: [exit_loop]
+    params:
+      name: config[moderator_agent][name]
+      description: config[moderator_agent][description]
+      instruction: config[moderator_agent][instruction]
+  specialists_group:
+    type: instance
+    params:
+      name: specialists_group
+      sub_agents: [url_analyst_agent, html_analyst_agent, content_analyst_agent, brand_analyst_agent]
+  url_analyst_agent:
+    type: instance
+    models: ['config[url_analyst]["model"]']
+    params:
+      name: config[url_analyst][name]
+      description: config[url_analyst][description]
+      instruction: config[url_analyst][instruction]
+      output_schema: UrlAnalystOutput
+      output_key: url_assessment
+  url_preprocessing_agent:
+    type: instance
+    models: [gemini-2.5-flash]
+    params:
+      name: url_preprocessing_agent
+
+models:
+  gemini-2.5-flash:
+    type: default
+    agents: [agent.UrlPreProcessor, url_preprocessing_agent]
+
+tools:
+  exit_loop:
+    type: function
+    agents: [moderator_agent]
+    params:
+      description: "Call this function ONLY when the final verdict is reached, \nsignaling the iterative process should end."
+
+teams:
+  cross_check_pipeline:
+    type: sequential
+    agents: [cross_check_pipeline, url_preprocessing_agent, debate_loop, judgement_agent]
+  debate_loop:
+    type: loop
+    agents: [debate_loop, specialists_group, moderator_agent]
+
+imports:
+  App: google.adk.apps.app.App
+  AsyncGenerator: typing.AsyncGenerator
+  asyncio: asyncio
+  BaseAgent: google.adk.agents.BaseAgent
+  BaseModel: pydantic.BaseModel
+  BeautifulSoup: bs4.BeautifulSoup
+  BrandAnalystOutput: schemas.BrandAnalystOutput
+  CallbackContext: google.adk.agents.callback_context.CallbackContext
+  config: app.config
+  ContentAnalystOutput: schemas.ContentAnalystOutput
+  Event: google.adk.events.Event
+  EventActions: google.adk.events.EventActions
+  field: dataclasses.field
+  Field: pydantic.Field
+  HtmlAnalystOutput: schemas.HtmlAnalystOutput
+  InMemorySessionService: google.adk.sessions.InMemorySessionService
+  interface: engine.interface
+  InvocationContext: google.adk.agents.invocation_context.InvocationContext
+  io: io
+  json: json
+  LiteLlm: google.adk.models.lite_llm.LiteLlm
+  litellm: litellm
+  Literal: typing.Literal
+  LlmAgent: google.adk.agents.LlmAgent
+  load: app.events.load
+  load_config: utils.load_config
+  load_dotenv: dotenv.load_dotenv
+  LoopAgent: google.adk.agents.LoopAgent
+  MarkItDown: markitdown.MarkItDown
+  me: mesop
+  on_toggle_debate: app.events.on_toggle_debate
+  on_url_input: app.events.on_url_input
+  Optional: typing.Optional
+  ParallelAgent: google.adk.agents.ParallelAgent
+  Path: pathlib.Path
+  process_website_data: utils.process_website_data
+  re: re
+  requests: requests
+  root_agent: agent.root_agent
+  Runner: google.adk.runners.Runner
+  S: app.styles.styles
+  SequentialAgent: google.adk.agents.SequentialAgent
+  State: app.state.State
+  sys: sys
+  ToolContext: google.adk.tools.tool_context.ToolContext
+  types: google.genai.types
+  UrlAnalystOutput: schemas.UrlAnalystOutput
+  validators: validators
+  yaml: yaml
+
+functions:
+  __init__:
+    type: sync
+    module: engine.agent
+    args: [self, name]
+  _run_async_impl:
+    type: async
+    module: engine.agent
+    args: [self, ctx]
+    params:
+      returns: AsyncGenerator
+  agent_card:
+    type: sync
+    module: app.main
+    args: [key, result]
+  app:
+    type: sync
+    module: app.main
+  create_runner:
+    type: sync
+    module: engine.interface
+    args: [app_name]
+  exit_loop:
+    type: sync
+    module: engine.agent
+    args: [tool_context]
+  extract_event_text:
+    type: sync
+    module: app.events
+    args: [event]
+  load:
+    type: sync
+    module: app.events
+    args: [e]
+  load_config:
+    type: sync
+    module: engine.utils
+    args: [file_path]
+    params:
+      returns: dict
+  normalize_status:
+    type: sync
+    module: app.events
+    args: [claim]
+  on_toggle_debate:
+    type: sync
+    module: app.events
+    args: [e]
+  on_url_input:
+    type: sync
+    module: app.events
+    args: [e]
+  parse_agent_json:
+    type: sync
+    module: app.events
+    args: [text]
+  process_agent_response:
+    type: sync
+    module: app.events
+    args: [agent, text]
+  process_website_data:
+    type: sync
+    module: engine.utils
+    args: [url]
+    params:
+      returns: tuple
+  run_analysis_process:
+    type: sync
+    module: app.events
+  set_all_agents:
+    type: sync
+    module: app.events
+    args: [state, status, confidence, evidence]
+  stream_analysis:
+    type: sync
+    module: engine.interface
+    args: [url_input]
+  url_validation_callback:
+    type: sync
+    module: engine.agent
+    args: [callback_context]
+    params:
+      returns: Optional[types.Content]
+
+files:
+  .env:
+    type: literal
+    actions: [read]
+    params:
+      path: [Path.parent.parent]
+  config.yaml:
+    type: literal
+    actions: [read]
+    params:
+      caller: [load_config]
+      path: [Path.parent]
+  file_path:
+    type: variable
+    actions: [read]
+    params:
+      caller: [open, yaml.safe_load]
+      alias: [f]
